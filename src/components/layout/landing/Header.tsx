@@ -1,4 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
 import React from "react";
 
 type Props = {};
@@ -23,16 +25,28 @@ function Header({}: Props) {
 
   return (
     <header>
-      <div className="container mx-auto max-w-7xl p-4">
-        <div className="flex items-center justify-between">
-          <div className="text-base font-semibold">FastFolio</div>
+      <div className="container mx-auto w-full bg-transparent">
+        <nav
+          className="mx-auto flex max-w-7xl items-center justify-between p-4"
+          aria-label="Global"
+        >
+          <div className="flex lg:flex-1">
+            <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
+              <span className="text-md font-semibold">FastFolio</span>
+            </Link>
+          </div>
 
-          <div>
+          <div className="flex lg:hidden"></div>
+
+          <div className="hidden lg:flex lg:gap-x-8">
             <MenuPaths menusPath={menusPath} />
           </div>
 
-          <div></div>
-        </div>
+          <div className="flex items-center gap-2">
+            <Button>{t("sign_in")}</Button>
+            <Button variant="outline">{t("sign_up")}</Button>
+          </div>
+        </nav>
       </div>
     </header>
   );

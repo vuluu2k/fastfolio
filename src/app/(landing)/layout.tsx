@@ -1,6 +1,6 @@
 import React from "react";
-import Header from '@/components/layout/landing/Header'
-import Footer from '@/components/layout/landing/Footer'
+import Header from "@/components/layout/landing/Header";
+import Footer from "@/components/layout/landing/Footer";
 
 type Props = {
   children: React.ReactNode;
@@ -8,11 +8,11 @@ type Props = {
 
 function LandingLayout({ children }: Props) {
   return (
-    <>
+    <main className="relative z-10 min-h-dvh">
       <Header />
-      <main>{children}</main>
+      {children}
       <Footer />
-    </>
+    </main>
   );
 }
 
