@@ -5,5 +5,8 @@
     "pricing": "Pricing",
     "sign_in": "Sign in",
     "sign_up": "Sign up"
+  },
+  "home": {
+    "get_your_ai_portfolio": "Get Your Ai Portfolio"
   }
 }

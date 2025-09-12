@@ -3,5 +3,6 @@
   "editor.tabSize": 2,
   "i18n-ally.localesPaths": ["messages", "src/i18n"],
   "i18n-ally.keystyle": "nested",
-  "i18n-ally.annotationInPlace": false
+  "i18n-ally.annotationInPlace": false,
+  "i18n-ally.sourceLanguage": "en"
 }

@@ -5,5 +5,8 @@
     "pricing": "Bảng giá",
     "sign_up": "Đăng ký",
     "sign_in": "Đăng nhập"
+  },
+  "home": {
+    "get_your_ai_portfolio": "Tạo thông tin AI của bạn"
   }
 }
