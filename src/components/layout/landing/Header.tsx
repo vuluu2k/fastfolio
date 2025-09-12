@@ -1,11 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
+"use client";
+
 import Link from "next/link";
-import React from "react";
+import { usePathname } from "next/navigation";
 
-type Props = {};
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-function Header({}: Props) {
+function Header() {
   const t = useTranslations("header");
 
   const menusPath = [
@@ -42,9 +44,13 @@ function Header({}: Props) {
             <MenuPaths menusPath={menusPath} />
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button>{t("sign_in")}</Button>
-            <Button variant="outline">{t("sign_up")}</Button>
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-4 lg:items-center">
+            <div className="flex items-center gap-2">
+              <Button size="sm">{t("sign_in")}</Button>
+              <Button size="sm" variant="outline">
+                {t("sign_up")}
+              </Button>
+            </div>
           </div>
         </nav>
       </div>
@@ -57,14 +63,25 @@ function MenuPaths({
 }: {
   menusPath: { name: string; href: string }[];
 }) {
+  const linkActive = usePathname();
+
   return (
-    <div className="flex items-center gap-8">
+    <>
       {menusPath.map((menu) => (
-        <a key={menu.name} href={menu.href}>
+        <Link
+          className={cn(
+            "text-sm font-light leading-6 transition-colors border-foreground text-black",
+            {
+              "border-b-2": linkActive === menu.href,
+            }
+          )}
+          key={menu.name}
+          href={menu.href}
+        >
           {menu.name}
-        </a>
+        </Link>
       ))}
-    </div>
+    </>
   );
 }
 
