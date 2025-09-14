@@ -153,7 +153,7 @@ function PreviewSection() {
               onFocus={() => setPaused(true)}
               onBlur={() => setPaused(false)}
             >
-              <div className="absolute top-0 left-0 group-hover:opacity-100 opacity-0 flex items-center justify-center w-full h-full">
+              <div className="absolute top-0 left-0 transition-all scale-75 group-hover:scale-100 group-hover:opacity-100 opacity-0 flex items-center justify-center w-full h-full">
                 <Button asChild>
                   <span>{t("try_it_live")}</span>
                 </Button>
