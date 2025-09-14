@@ -119,4 +119,31 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .blinking-cursor {
+    animation: blink 1s infinite;
+  }
+
+  .blinking-cursor::after {
+    content: "|";
+    position: absolute;
+    -webkit-animation: blink 1s infinite;
+    -moz-animation: blink 1s infinite;
+    -o-animation: blink 1s infinite;
+    animation: blink 1s infinite;
+    color: currentColor;
+    font-weight: 300;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

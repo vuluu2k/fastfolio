@@ -1,7 +1,7 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion, useMotionValue, useTransform } from "motion/react";
 
 import { cn } from "@/lib/utils";

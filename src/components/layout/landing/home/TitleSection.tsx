@@ -2,8 +2,12 @@
 
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import Form from "next/form";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
 
 const topElementVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -47,6 +51,7 @@ const MessageUsed = ({ count }: { count: number }) => {
 
 function TitleSection() {
   const t = useTranslations("home");
+  const [focus, setFocus] = useState(false);
 
   return (
     <motion.section
@@ -68,6 +73,28 @@ function TitleSection() {
           </h3>
         </div>
       </div>
+
+      <Form action="/" className="max-w-md mx-auto">
+        <div className="relative bg-white/10 backdrop-blur-md flex items-center rounded-full border p-1.5 shadow-sm">
+          <span className=" pl-4 text-muted-foreground">fastfol.io.vn/</span>
+          <div className="relative flex-1 flex items-center">
+            <input
+              placeholder="your-name"
+              onFocus={() => setFocus(true)}
+              onBlur={() => setFocus(false)}
+              className="flex-1 bg-transparent px-2 outline-none placeholder:text-muted-foreground"
+              type="text"
+            />
+            {!focus && (
+              <span className="absolute h-10 top-0 left-1.5 pointer-events-none blinking-cursor"></span>
+            )}
+          </div>
+
+          <Button className="rounded-full w-10 h-10 bg-primary flex items-center justify-center disabled:bg-primary">
+            <ArrowRight />
+          </Button>
+        </div>
+      </Form>
     </motion.section>
   );
 }
