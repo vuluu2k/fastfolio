@@ -7,6 +7,16 @@
     "sign_up": "Sign up"
   },
   "home": {
-    "get_your_ai_portfolio": "Get Your Ai Portfolio"
+    "get_your_ai_portfolio": "Get your AI Portfolio",
+    "messages_exchanged": "messages exchanged",
+    "create_conversational_portfolio": "Create a conversational portfolio that answers",
+    "questions_about_you_24_7": "Questions about you 24/7",
+    "overview": "Overview",
+    "projects": "Projects",
+    "skills": "Skills",
+    "background": "Background",
+    "hobbies": "Hobbies",
+    "contact": "Contact",
+    "try_it_live": "Try it live"
   }
 }
