@@ -6,6 +6,7 @@ import { motion, useMotionValue, useTransform } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const topElementVariants = {
   hidden: { opacity: 0 },
@@ -16,12 +17,30 @@ const topElementVariants = {
 };
 
 const BUTTON_KEYS = [
-  "overview",
-  "projects",
-  "skills",
-  "background",
-  "hobbies",
-  "contact",
+  {
+    key: "overview",
+    image: "https://www.fastfol.io/landing/portfolio-preview.png",
+  },
+  {
+    key: "projects",
+    image: "https://www.fastfol.io/landing/portfolio-preview.png",
+  },
+  {
+    key: "skills",
+    image: "https://www.fastfol.io/landing/portfolio-preview.png",
+  },
+  {
+    key: "background",
+    image: "https://www.fastfol.io/landing/portfolio-preview.png",
+  },
+  {
+    key: "hobbies",
+    image: "https://www.fastfol.io/landing/portfolio-preview.png",
+  },
+  {
+    key: "contact",
+    image: "https://www.fastfol.io/landing/portfolio-preview.png",
+  },
 ] as const;
 
 function PreviewSection() {
@@ -38,7 +57,11 @@ function PreviewSection() {
   const prevTimeRef = useRef<number | null>(null);
   const completedRef = useRef(false);
 
-  const buttons = BUTTON_KEYS.map((key) => ({ key, name: t(key) }));
+  const buttons = BUTTON_KEYS.map((button) => ({
+    key: button.key,
+    name: t(button.key),
+    image: button.image,
+  }));
 
   // Advance to next button when progress completes (guarded to fire once)
   useEffect(() => {
@@ -153,6 +176,13 @@ function PreviewSection() {
               onFocus={() => setPaused(true)}
               onBlur={() => setPaused(false)}
             >
+              <Image
+                alt="Hobbies showcase"
+                width={894}
+                height={558}
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.02] absolute inset-0 w-full h-full"
+                src={buttons[activeIndex].image}
+              />
               <div className="absolute top-0 left-0 transition-all scale-75 group-hover:scale-100 group-hover:opacity-100 opacity-0 flex items-center justify-center w-full h-full">
                 <Button asChild>
                   <span>{t("try_it_live")}</span>
