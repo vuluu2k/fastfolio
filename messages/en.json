@@ -31,6 +31,7 @@
     "custom_domain": "Custom Domain",
     "custom_domain_description": "Your brand, your domain.",
     "advanced_analytics": "Advanced Analytics",
-    "advanced_analytics_description": "Track every interaction."
+    "advanced_analytics_description": "Track every interaction.",
+    "developers": "Developers"
   }
 }
