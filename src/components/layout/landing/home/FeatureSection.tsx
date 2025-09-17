@@ -1,7 +1,14 @@
 "use client";
 
-import { Moon, ChartNoAxesColumnIncreasing } from "lucide-react";
 import { useRef, useState } from "react";
+import {
+  Moon,
+  ChartNoAxesColumnIncreasing,
+  Crown,
+  UsersRound,
+  Globe,
+  ChartLine,
+} from "lucide-react";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 
@@ -138,6 +145,34 @@ function FeatureSection() {
               title={t("improve_your_engagement")}
               description={t("improve_your_engagement_description")}
               icon={<ChartNoAxesColumnIncreasing />}
+            />
+          </li>
+          <li className="list-none md:col-span-1 md:row-span-2 min-h-[20rem]">
+            <ArticleCard
+              title={t("unlimit_message_with_your_api_key")}
+              description={t("unlimit_message_with_your_api_key_description")}
+              icon={<Crown />}
+            />
+          </li>
+          <li className="list-none md:col-span-1 min-h-[14rem]">
+            <ArticleCard
+              title={t("smart_adaptation")}
+              description={t("smart_adaptation_description")}
+              icon={<UsersRound />}
+            />
+          </li>
+          <li className="list-none md:col-span-1 min-h-[14rem]">
+            <ArticleCard
+              title={t("custom_domain")}
+              description={t("custom_domain_description")}
+              icon={<Globe />}
+            />
+          </li>
+          <li className="list-none md:col-span-1 min-h-[14rem]">
+            <ArticleCard
+              title={t("advanced_analytics")}
+              description={t("advanced_analytics_description")}
+              icon={<ChartLine />}
             />
           </li>
         </ul>

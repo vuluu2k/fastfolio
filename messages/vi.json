@@ -23,6 +23,14 @@
     "available_24_7": "Có sẵn 24/7",
     "available_24_7_description": "AI sinh đôi của bạn không bao giờ ngủ.",
     "improve_your_engagement": "Cải thiện sự tham gia của bạn 40%",
-    "improve_your_engagement_description": "Biến du khách thành cơ hội."
+    "improve_your_engagement_description": "Biến du khách thành cơ hội.",
+    "unlimit_message_with_your_api_key_description": "Không có giới hạn tin nhắn.  \nMô hình AI cấp trên cho các cuộc trò chuyện thông minh hơn",
+    "unlimit_message_with_your_api_key": "Tin nhắn không giới hạn với khóa API của bạn",
+    "smart_adaptation_description": "Thích ứng với nhu cầu của mỗi khách truy cập.",
+    "smart_adaptation": "Thích ứng thông minh",
+    "custom_domain": "Miền tùy chỉnh",
+    "custom_domain_description": "Thương hiệu của bạn, tên miền của bạn.",
+    "advanced_analytics": "Phân tích nâng cao",
+    "advanced_analytics_description": "Theo dõi mọi tương tác."
   }
 }

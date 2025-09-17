@@ -23,6 +23,14 @@
     "available_24_7": "Avaiable 24/7",
     "available_24_7_description": "Your AI twin never sleeps.",
     "improve_your_engagement": "Improve your engagement by 40%",
-    "improve_your_engagement_description": "Turn visitors into opportunities."
+    "improve_your_engagement_description": "Turn visitors into opportunities.",
+    "unlimit_message_with_your_api_key_description": "No message limits.  Superior AI model for smarter conversations",
+    "unlimit_message_with_your_api_key": "Unlimited message with your API KEY",
+    "smart_adaptation": "Smart adaptation",
+    "smart_adaptation_description": "Adapt to each visitor's needs.",
+    "custom_domain": "Custom Domain",
+    "custom_domain_description": "Your brand, your domain.",
+    "advanced_analytics": "Advanced Analytics",
+    "advanced_analytics_description": "Track every interaction."
   }
 }

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 function Header() {
   const t = useTranslations("header");
@@ -34,6 +35,12 @@ function Header() {
         >
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
+              <Image
+                src="https://www.fastfol.io/logo/fastfolio-light.svg"
+                alt="logo"
+                width={20}
+                height={20}
+              />
               <span className="text-md font-semibold">FastFolio</span>
             </Link>
           </div>
