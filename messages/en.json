@@ -32,6 +32,15 @@
     "custom_domain_description": "Your brand, your domain.",
     "advanced_analytics": "Advanced Analytics",
     "advanced_analytics_description": "Track every interaction.",
-    "developers": "Developers"
+    "developers": "Developers",
+    "content_creators": "Content Creators",
+    "freelancers": "Freelancers",
+    "students": "Students",
+    "designers": "Designers",
+    "digital_pros": "Digital Pros",
+    "perfect_for": "Perfect for",
+    "etc": "...",
+    "share": "Share",
+    "anywhere": "anywhere"
   }
 }

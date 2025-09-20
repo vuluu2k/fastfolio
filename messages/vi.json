@@ -32,6 +32,15 @@
     "custom_domain_description": "Thương hiệu của bạn, tên miền của bạn.",
     "advanced_analytics": "Phân tích nâng cao",
     "advanced_analytics_description": "Theo dõi mọi tương tác.",
-    "developers": "Nhà phát triển"
+    "developers": "Nhà phát triển",
+    "content_creators": "Sáng tạo nội dung",
+    "freelancers": "Làm việc tự do",
+    "students": "Sinh viên",
+    "designers": "Nhà thiết kế",
+    "digital_pros": "Kỹ thuật số",
+    "perfect_for": "Hoàn hảo cho",
+    "etc": "...",
+    "share": "Chia sẻ",
+    "anywhere": "bất cứ nơi nào"
   }
 }
