@@ -44,7 +44,20 @@
     "anywhere": "anywhere",
     "loved_by_professionals_description": "Join thousands who've transformed their online presence with an",
     "loved_by_professionals_description_2": "AI-powered portfolio",
-    "loved_by_professionals": "Loved by professionals worldwide"
+    "loved_by_professionals": "Loved by professionals worldwide",
+    "frequently_asked_questions": "Frequently asked questions",
+    "question_1": "What is Fastfolio?",
+    "answer_1": "Fastfolio is an AI-powered portfolio builder that creates interactive, conversational portfolios. Your visitors can ask questions about your work and get instant, personalized responses.",
+    "question_2": "How does the AI portfolio work?",
+    "answer_2": "Simply add your projects, skills, and experience. Our AI learns from your content and answers visitor questions 24/7, making your portfolio more engaging than a static website.",
+    "question_3": "Can I customize my portfolio?",
+    "answer_3": "Yes. Choose from multiple themes, add custom sections, and personalize the AI responses to match your voice and style.",
+    "question_4": "Is Fastfolio free?",
+    "answer_4": " We offer a free plan with core features. Pro plans unlock unlimited AI conversations, advanced analytics, and watermark removal.",
+    "question_5": "How quickly can I create my portfolio?",
+    "answer_5": "Most users have their AI portfolio live in under 5 minutes. Just add your content and publish.",
+    "question_6": "Can recruiters and clients use it?",
+    "answer_6": "Absolutely. Share your unique link and let visitors ask specific questions about your skills, experience, and projects - perfect for standing out in applications."
   },
   "loved_by_professionals": "Loved by professionals worldwide"
 }
