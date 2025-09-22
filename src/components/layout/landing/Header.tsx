@@ -1,30 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { routes } from "@/app/config/routes";
 
 function Header() {
   const t = useTranslations("header");
+  const router = useRouter();
 
   const menusPath = [
     {
       name: t("home"),
-      href: "/",
+      href: routes.home.path,
     },
     {
       name: t("examples"),
-      href: "/examples",
+      href: routes.examples.path,
     },
     {
       name: t("pricing"),
-      href: "/pricing",
+      href: routes.pricing.path,
     },
   ];
+
+  const onSignIn = () => {
+    router.push(routes.signin.path);
+  };
+
+  const onSignUp = () => {
+    router.push(routes.signup.path);
+  };
 
   return (
     <header>
@@ -53,8 +63,10 @@ function Header() {
 
           <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-4 lg:items-center">
             <div className="flex items-center gap-2">
-              <Button size="sm">{t("sign_in")}</Button>
-              <Button size="sm" variant="outline">
+              <Button size="sm" onClick={() => onSignIn()}>
+                {t("sign_in")}
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => onSignUp()}>
                 {t("sign_up")}
               </Button>
             </div>
