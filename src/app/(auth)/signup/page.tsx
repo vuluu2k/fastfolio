@@ -19,6 +19,11 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 const requestSchema = z.object({
   name: z.string().min(2, { message: "Tên tối thiểu 2 ký tự" }),
@@ -26,9 +31,7 @@ const requestSchema = z.object({
 });
 
 const verifySchema = z.object({
-  code: z
-    .string()
-    .regex(/^\d{6}$/g, { message: "Mã gồm 6 chữ số" }),
+  code: z.string().regex(/^\d{6}$/g, { message: "Mã gồm 6 chữ số" }),
 });
 
 export default function SignUp() {
@@ -161,9 +164,7 @@ export default function SignUp() {
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Đang gửi mã..." : "Gửi mã xác thực"}
               </Button>
-              {error ? (
-                <p className="text-sm text-red-600">{error}</p>
-              ) : null}
+              {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </form>
           </Form>
         ) : (
@@ -174,7 +175,8 @@ export default function SignUp() {
             >
               <div>
                 <p className="text-sm text-muted-foreground">
-                  Mã xác thực đã được gửi tới {email}. Vui lòng nhập mã gồm 6 chữ số.
+                  Mã xác thực đã được gửi tới {email}. Vui lòng nhập mã gồm 6
+                  chữ số.
                 </p>
               </div>
               <FormField
@@ -184,27 +186,49 @@ export default function SignUp() {
                   <FormItem>
                     <FormLabel>Mã xác thực</FormLabel>
                     <FormControl>
-                      <Input placeholder="123456" inputMode="numeric" {...field} />
+                      <div className="flex items-center justify-between w-full gap-3">
+                        <InputOTP
+                          maxLength={6}
+                          autoFocus
+                          inputMode="numeric"
+                          value={field.value}
+                          onChange={(v) => field.onChange(v.replace(/\D/g, ""))}
+                          onComplete={(val) => {
+                            if (val.length === 6) {
+                              verifyForm.handleSubmit(onVerify)();
+                            }
+                          }}
+                          aria-label="Mã xác thực 6 chữ số"
+                          containerClassName=""
+                        >
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setStep("request")}
+                        >
+                          Sửa email
+                        </Button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="flex gap-2">
+              <div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Đang xác thực..." : "Xác thực & Đăng ký"}
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setStep("request")}
-                >
-                  Sửa email
-                </Button>
               </div>
-              {error ? (
-                <p className="text-sm text-red-600">{error}</p>
-              ) : null}
+              {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </form>
           </Form>
         )}
@@ -237,4 +261,3 @@ export default function SignUp() {
     </div>
   );
 }
-
