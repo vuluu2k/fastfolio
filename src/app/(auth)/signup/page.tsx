@@ -18,11 +18,17 @@ import { routes } from "@/app/config/routes";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useCallback, useState } from "react";
 
-const schema = z.object({
+const requestSchema = z.object({
   name: z.string().min(2, { message: "Tên tối thiểu 2 ký tự" }),
   email: z.string().email({ message: "Email không hợp lệ" }),
-  password: z.string().min(6, { message: "Mật khẩu tối thiểu 6 ký tự" }),
+});
+
+const verifySchema = z.object({
+  code: z
+    .string()
+    .regex(/^\d{6}$/g, { message: "Mã gồm 6 chữ số" }),
 });
 
 export default function SignUp() {
@@ -30,14 +36,77 @@ export default function SignUp() {
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl") ?? routes.home.path;
 
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-    defaultValues: { name: "", email: "", password: "" },
+  const [step, setStep] = useState<"request" | "verify">("request");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const requestForm = useForm<z.infer<typeof requestSchema>>({
+    resolver: zodResolver(requestSchema),
+    defaultValues: { name: "", email: "" },
   });
 
-  async function onSubmit() {
-    // TODO: Implement custom sign-up (database) if needed
-  }
+  const verifyForm = useForm<z.infer<typeof verifySchema>>({
+    resolver: zodResolver(verifySchema),
+    defaultValues: { code: "" },
+  });
+
+  const onRequest = useCallback(
+    async (values: z.infer<typeof requestSchema>) => {
+      setError(null);
+      setLoading(true);
+      try {
+        const res = await fetch("/api/auth/send-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: values.email }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data?.ok) {
+          throw new Error(data?.error || "Gửi mã thất bại");
+        }
+        setEmail(values.email);
+        setName(values.name);
+        setStep("verify");
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : "Đã xảy ra lỗi";
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  const onVerify = useCallback(
+    async (values: z.infer<typeof verifySchema>) => {
+      setError(null);
+      setLoading(true);
+      try {
+        const result = await signIn("credentials", {
+          redirect: false,
+          email,
+          code: values.code,
+          name,
+          callbackUrl,
+        });
+
+        if (!result?.ok) {
+          throw new Error(result?.error || "Mã không hợp lệ hoặc đã hết hạn");
+        }
+
+        // On success, redirect
+        window.location.href = result.url || callbackUrl;
+      } catch (e: unknown) {
+        const message = e instanceof Error ? e.message : "Xác thực thất bại";
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [callbackUrl, email, name]
+  );
 
   async function oauthSignIn(provider: "google" | "github") {
     await signIn(provider, { callbackUrl });
@@ -53,56 +122,92 @@ export default function SignUp() {
       </div>
 
       <div className="space-y-6">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("full_name")}</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Nguyễn Văn A" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("email")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="you@example.com"
-                      type="email"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("password")}</FormLabel>
-                  <FormControl>
-                    <Input placeholder="••••••••" type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="w-full">
-              {t("signup.submit")}
-            </Button>
-          </form>
-        </Form>
+        {step === "request" ? (
+          <Form {...requestForm}>
+            <form
+              onSubmit={requestForm.handleSubmit(onRequest)}
+              className="space-y-4"
+            >
+              <FormField
+                control={requestForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("full_name")}</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Nguyễn Văn A" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={requestForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("email")}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="you@example.com"
+                        type="email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Đang gửi mã..." : "Gửi mã xác thực"}
+              </Button>
+              {error ? (
+                <p className="text-sm text-red-600">{error}</p>
+              ) : null}
+            </form>
+          </Form>
+        ) : (
+          <Form {...verifyForm}>
+            <form
+              onSubmit={verifyForm.handleSubmit(onVerify)}
+              className="space-y-4"
+            >
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  Mã xác thực đã được gửi tới {email}. Vui lòng nhập mã gồm 6 chữ số.
+                </p>
+              </div>
+              <FormField
+                control={verifyForm.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Mã xác thực</FormLabel>
+                    <FormControl>
+                      <Input placeholder="123456" inputMode="numeric" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex gap-2">
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Đang xác thực..." : "Xác thực & Đăng ký"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setStep("request")}
+                >
+                  Sửa email
+                </Button>
+              </div>
+              {error ? (
+                <p className="text-sm text-red-600">{error}</p>
+              ) : null}
+            </form>
+          </Form>
+        )}
 
         <div className="flex items-center gap-2">
           <div className="h-px flex-1 bg-muted" />
@@ -132,3 +237,4 @@ export default function SignUp() {
     </div>
   );
 }
+
