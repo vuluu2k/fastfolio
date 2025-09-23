@@ -78,6 +78,7 @@ export default function SignUp() {
     resolver: zodResolver(verifySchema),
     defaultValues: { code: "" },
   });
+  const [otp, setOtp] = useState("");
 
   const onRequest = useCallback(
     async (values: z.infer<typeof requestSchema>) => {
@@ -104,6 +105,9 @@ export default function SignUp() {
         if (typeof window !== "undefined") {
           sessionStorage.setItem("signup:password", values.password);
         }
+        // Reset OTP form & go to verify step
+        verifyForm.reset({ code: "" });
+        setOtp("");
         setStep("verify");
         // reflect verify state & email in URL so refresh keeps context
         const url = new URL(window.location.href);
@@ -256,7 +260,9 @@ export default function SignUp() {
                   ? t("actions.registering")
                   : t("actions.register_and_send_code")}
               </Button>
-              {error ? <p className="text-sm text-red-600">{error}</p> : null}
+              {error ? (
+                <p className="text-sm text-red-600">{t(error)}</p>
+              ) : null}
             </form>
           </Form>
         ) : (
@@ -270,66 +276,60 @@ export default function SignUp() {
                   {t("otp.sent_to", { email })}
                 </p>
               </div>
-              <FormField
-                control={verifyForm.control}
-                name="code"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("otp.label")}</FormLabel>
-                    <FormControl>
-                      <div className="flex items-center justify-between w-full gap-3">
-                        <InputOTP
-                          maxLength={6}
-                          autoFocus
-                          inputMode="numeric"
-                          value={field.value}
-                          onChange={(v) => {
-                            field.onChange(v);
-                          }}
-                          onComplete={(val) => {
-                            if (val.length === 6) {
-                              verifyForm.handleSubmit(onVerify)();
-                            }
-                          }}
-                          aria-label="Mã xác thực 6 chữ số"
-                        >
-                          <InputOTPGroup>
-                            <InputOTPSlot index={0} />
-                            <InputOTPSlot index={1} />
-                            <InputOTPSlot index={2} />
-                            <InputOTPSlot index={3} />
-                            <InputOTPSlot index={4} />
-                            <InputOTPSlot index={5} />
-                          </InputOTPGroup>
-                        </InputOTP>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => setStep("request")}
-                        >
-                          {t("actions.edit_email")}
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <FormItem>
+                <FormLabel>{t("otp.label")}</FormLabel>
+                <FormControl>
+                  <div className="flex items-center justify-between w-full gap-3">
+                    <InputOTP
+                      key={`otp-${step}-${email}`}
+                      maxLength={6}
+                      autoFocus
+                      inputMode="numeric"
+                      value={otp}
+                      onChange={(v) => {
+                        const digits = v.replace(/\D/g, "");
+                        setOtp(digits);
+                        verifyForm.setValue("code", digits, { shouldValidate: true });
+                      }}
+                      onComplete={(val) => {
+                        const digits = val.replace(/\D/g, "");
+                        setOtp(digits);
+                        verifyForm.setValue("code", digits, { shouldValidate: true });
+                        if (digits.length === 6) {
+                          verifyForm.handleSubmit(onVerify)();
+                        }
+                      }}
+                      aria-label="Mã xác thực 6 chữ số"
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setStep("request")}
+                    >
+                      {t("actions.edit_email")}
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
               {!email ? (
-                <FormField
-                  control={verifyForm.control}
-                  name="code"
-                  render={() => (
-                    <div className="space-y-2">
-                      <FormLabel>{t("email")}</FormLabel>
-                      <Input
-                        type="email"
-                        placeholder="you@example.com"
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                  )}
-                />
+                <div className="space-y-2">
+                  <FormLabel>{t("email")}</FormLabel>
+                  <Input
+                    type="email"
+                    placeholder="you@example.com"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
               ) : null}
               <div>
                 <Button type="submit" className="w-full" disabled={loading}>
