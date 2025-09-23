@@ -25,29 +25,28 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
+const requestSchema = z
+  .object({
+    name: z.string().min(2, { message: "validation.name_min" }),
+    email: z.string().email({ message: "validation.email_invalid" }),
+    password: z.string().min(6, { message: "validation.password_min" }),
+    confirmPassword: z.string().min(6, { message: "validation.confirm_min" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "validation.password_mismatch",
+    path: ["confirmPassword"],
+  });
+
+const verifySchema = z.object({
+  code: z.string().regex(/^\d{6}$/, { message: "validation.otp_invalid" }),
+});
+
 export default function SignUp() {
   const t = useTranslations("auth");
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl") ?? routes.home.path;
 
   // Build schemas after we have the translation function
-  const requestSchema = z
-    .object({
-      name: z.string().min(2, { message: t("validation.name_min") }),
-      email: z.string().email({ message: t("validation.email_invalid") }),
-      password: z.string().min(6, { message: t("validation.password_min") }),
-      confirmPassword: z
-        .string()
-        .min(6, { message: t("validation.confirm_min") }),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: t("validation.password_mismatch"),
-      path: ["confirmPassword"],
-    });
-
-  const verifySchema = z.object({
-    code: z.string().regex(/^\d{6}$/, { message: t("validation.otp_invalid") }),
-  });
 
   const [step, setStep] = useState<"request" | "verify">("request");
   const [email, setEmail] = useState("");
@@ -285,7 +284,7 @@ export default function SignUp() {
                           inputMode="numeric"
                           value={field.value}
                           onChange={(v) => {
-                            field.onChange(v.replace(/\D/g, ""));
+                            field.onChange(v);
                           }}
                           onComplete={(val) => {
                             if (val.length === 6) {
@@ -293,7 +292,6 @@ export default function SignUp() {
                             }
                           }}
                           aria-label="Mã xác thực 6 chữ số"
-                          containerClassName=""
                         >
                           <InputOTPGroup>
                             <InputOTPSlot index={0} />
@@ -340,7 +338,9 @@ export default function SignUp() {
                     : t("actions.verify_and_signin")}
                 </Button>
               </div>
-              {error ? <p className="text-sm text-red-600">{error}</p> : null}
+              {error ? (
+                <p className="text-sm text-red-600">{t(error)}</p>
+              ) : null}
             </form>
           </Form>
         )}
