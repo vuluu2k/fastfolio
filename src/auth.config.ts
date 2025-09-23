@@ -53,54 +53,6 @@ export const authConfig = {
         },
       },
     }),
-    Credentials({
-      name: "Email OTP",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        code: { label: "Code", type: "text" },
-        name: { label: "Name", type: "text" },
-      },
-      async authorize(credentials) {
-        try {
-          const email = credentials?.email?.toLowerCase().trim();
-          const code = credentials?.code?.trim();
-          const name = credentials?.name?.trim();
-
-          if (!email || !code) return null;
-
-          // Find matching verification token
-          const vt = await prisma.verificationToken.findUnique({
-            where: { token: code },
-          });
-
-          if (!vt || vt.identifier.toLowerCase() !== email) {
-            return null;
-          }
-
-          if (vt.expires < new Date()) {
-            // Cleanup expired token
-            await prisma.verificationToken.delete({
-              where: { token: vt.token },
-            });
-            return null;
-          }
-
-          // Upsert user by email
-          const user = await prisma.user.upsert({
-            where: { email },
-            update: {},
-            create: { email, name },
-          });
-
-          // Consume token so it cannot be reused
-          await prisma.verificationToken.delete({ where: { token: vt.token } });
-
-          return user;
-        } catch {
-          return null;
-        }
-      },
-    }),
   ],
   pages: {
     signIn: "/signin",
