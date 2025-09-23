@@ -65,7 +65,7 @@ model VerificationToken {
 
 model Repo {
   id                  Int      @id
-  userId              String
+  userId              String?
   name                String
   description         String
   website             String
