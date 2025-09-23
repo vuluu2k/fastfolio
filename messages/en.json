@@ -59,5 +59,39 @@
     "question_6": "Can recruiters and clients use it?",
     "answer_6": "Absolutely. Share your unique link and let visitors ask specific questions about your skills, experience, and projects - perfect for standing out in applications."
   },
-  "loved_by_professionals": "Loved by professionals worldwide"
+  "loved_by_professionals": "Loved by professionals worldwide",
+  "auth_layout": {
+    "header_title": "FastFolio · AI Portfolio",
+    "featured_title": "Featured project",
+    "project_title": "AI Resume & Portfolio",
+    "highlights_title": "Highlights",
+    "highlight_1": "Build your profile with AI",
+    "highlight_2": "Customizable themes",
+    "highlight_3": "SEO optimized",
+    "quote_text": "Showcase your work professionally. Connect with employers fast."
+  },
+  "auth": {
+    "signin": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to manage your portfolio projects on FastFolio.",
+      "submit": "Sign in",
+      "no_account": "Don't have an account?",
+      "link": "Sign in"
+    },
+    "signup": {
+      "title": "Create account",
+      "subtitle": "Start building your professional AI portfolio.",
+      "submit": "Sign up",
+      "have_account": "Already have an account?",
+      "google": "Sign up with Google",
+      "github": "Sign up with GitHub",
+      "link": "Sign up"
+    },
+    "email": "Email",
+    "password": "Password",
+    "full_name": "Full name",
+    "or": "Or",
+    "continue_google": "Continue with Google",
+    "continue_github": "Continue with GitHub"
+  }
 }

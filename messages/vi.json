@@ -58,5 +58,39 @@
     "answer_5": "Hầu hết người dùng có danh mục AI của họ sống dưới 5 phút. \nChỉ cần thêm nội dung của bạn và xuất bản.",
     "question_6": "Nhà tuyển dụng và khách hàng có thể sử dụng nó không?",
     "answer_6": "Tuyệt đối. \nChia sẻ liên kết độc đáo của bạn và cho phép khách truy cập đặt câu hỏi cụ thể về các kỹ năng, kinh nghiệm và dự án của bạn - hoàn hảo để nổi bật trong các ứng dụng."
+  },
+  "auth": {
+    "signin": {
+      "title": "Chào mừng trở lại",
+      "subtitle": "Đăng nhập để quản lý dự án portfolio của bạn trên FastFolio.",
+      "submit": "Đăng nhập",
+      "no_account": "Chưa có tài khoản?",
+      "link": "Đăng nhập"
+    },
+    "signup": {
+      "title": "Tạo tài khoản",
+      "subtitle": "Bắt đầu xây dựng portfolio AI chuyên nghiệp của bạn.",
+      "submit": "Đăng ký",
+      "have_account": "Đã có tài khoản?",
+      "google": "Đăng ký với Google",
+      "github": "Đăng ký với GitHub",
+      "link": "Đăng ký"
+    },
+    "email": "Email",
+    "password": "Mật khẩu",
+    "full_name": "Họ và tên",
+    "or": "Hoặc",
+    "continue_google": "Tiếp tục với Google",
+    "continue_github": "Tiếp tục với GitHub"
+  },
+  "auth_layout": {
+    "header_title": "FastFolio · AI Portfolio",
+    "featured_title": "Dự án nổi bật",
+    "project_title": "AI Resume & Portfolio",
+    "highlights_title": "Điểm nổi bật",
+    "highlight_1": "Tạo hồ sơ bằng AI",
+    "highlight_2": "Tùy biến chủ đề",
+    "highlight_3": "Tối ưu SEO",
+    "quote_text": "Hiển thị dự án của bạn một cách chuyên nghiệp. Kết nối nhanh với nhà tuyển dụng."
   }
 }
