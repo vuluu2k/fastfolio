@@ -4,13 +4,31 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const t = useTranslations("auth_layout");
 
   return (
-    <div className="min-h-dvh lg:h-dvh grid lg:grid-cols-2 overflow-hidden">
+    <div className="relative min-h-dvh lg:h-dvh grid lg:grid-cols-2 overflow-hidden">
+      {/* Top-left logo back to home */}
+      <div className="absolute left-4 top-4 z-20">
+        <Link
+          href="/"
+          aria-label="FastFolio Home"
+          className="flex items-center gap-2 px-1 py-1 text-black transition-opacity hover:opacity-80"
+        >
+          <Image
+            src="https://www.fastfol.io/logo/fastfolio-light.svg"
+            alt="FastFolio"
+            width={20}
+            height={20}
+          />
+          <span className="hidden sm:inline text-sm font-semibold">FastFolio</span>
+        </Link>
+      </div>
       {/* Left: Animated container for page content */}
       <motion.div
         key={pathname}
