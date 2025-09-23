@@ -30,7 +30,9 @@ const requestSchema = z
     name: z.string().min(2, { message: "Tên tối thiểu 2 ký tự" }),
     email: z.string().email({ message: "Email không hợp lệ" }),
     password: z.string().min(6, { message: "Mật khẩu tối thiểu 6 ký tự" }),
-    confirmPassword: z.string().min(6, { message: "Mật khẩu tối thiểu 6 ký tự" }),
+    confirmPassword: z
+      .string()
+      .min(6, { message: "Mật khẩu tối thiểu 6 ký tự" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Mật khẩu không khớp",
@@ -38,7 +40,7 @@ const requestSchema = z
   });
 
 const verifySchema = z.object({
-  code: z.string().regex(/^\d{6}$/g, { message: "Mã gồm 6 chữ số" }),
+  code: z.string().regex(/^\d{6}$/, { message: "Mã gồm 6 chữ số" }),
 });
 
 export default function SignUp() {
@@ -191,7 +193,11 @@ export default function SignUp() {
                   <FormItem>
                     <FormLabel>{t("password")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="••••••••" type="password" {...field} />
+                      <Input
+                        placeholder="••••••••"
+                        type="password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -204,7 +210,11 @@ export default function SignUp() {
                   <FormItem>
                     <FormLabel>Nhập lại mật khẩu</FormLabel>
                     <FormControl>
-                      <Input placeholder="••••••••" type="password" {...field} />
+                      <Input
+                        placeholder="••••••••"
+                        type="password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,7 +251,9 @@ export default function SignUp() {
                           autoFocus
                           inputMode="numeric"
                           value={field.value}
-                          onChange={(v) => field.onChange(v.replace(/\D/g, ""))}
+                          onChange={(v) => {
+                            field.onChange(v.replace(/\D/g, ""));
+                          }}
                           onComplete={(val) => {
                             if (val.length === 6) {
                               verifyForm.handleSubmit(onVerify)();
