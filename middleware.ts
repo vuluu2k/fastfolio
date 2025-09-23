@@ -1,28 +1,36 @@
-import { auth } from "@/auth";
+import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-// Protect specific routes by redirecting unauthenticated users to /signin
-const protectedRoutes = [
-  "/dashboard",
-];
+// Define protected route prefixes
+const protectedRoutes = ["/dashboard"];
 
-export default auth(async (req: NextRequest) => {
-  const { nextUrl } = req;
-  const isProtected = protectedRoutes.some((base) =>
-    nextUrl.pathname.startsWith(base)
-  );
+export default withAuth(
+  function middleware(req) {
+    const { nextUrl } = req;
+    const isProtected = protectedRoutes.some((base) =>
+      nextUrl.pathname.startsWith(base)
+    );
 
-  const isAuthed = Boolean((req as unknown as { auth?: unknown }).auth);
+    // req.nextauth.token is available in withAuth
+    const isAuthed = Boolean((req as any).nextauth?.token);
 
-  if (isProtected && !isAuthed) {
-    const signInUrl = new URL("/signin", nextUrl);
-    signInUrl.searchParams.set("callbackUrl", nextUrl.pathname + nextUrl.search);
-    return NextResponse.redirect(signInUrl);
-  }
+    if (isProtected && !isAuthed) {
+      const signInUrl = new URL("/signin", nextUrl);
+      signInUrl.searchParams.set(
+        "callbackUrl",
+        nextUrl.pathname + nextUrl.search,
+      );
+      return NextResponse.redirect(signInUrl);
+    }
 
-  return NextResponse.next();
-});
+    return NextResponse.next();
+  },
+  {
+    callbacks: {
+      authorized: () => true, // we handle redirects manually above
+    },
+  },
+);
 
 export const config = {
   matcher: [

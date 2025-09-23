@@ -25,10 +25,17 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-const requestSchema = z.object({
-  name: z.string().min(2, { message: "Tên tối thiểu 2 ký tự" }),
-  email: z.string().email({ message: "Email không hợp lệ" }),
-});
+const requestSchema = z
+  .object({
+    name: z.string().min(2, { message: "Tên tối thiểu 2 ký tự" }),
+    email: z.string().email({ message: "Email không hợp lệ" }),
+    password: z.string().min(6, { message: "Mật khẩu tối thiểu 6 ký tự" }),
+    confirmPassword: z.string().min(6, { message: "Mật khẩu tối thiểu 6 ký tự" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Mật khẩu không khớp",
+    path: ["confirmPassword"],
+  });
 
 const verifySchema = z.object({
   code: z.string().regex(/^\d{6}$/g, { message: "Mã gồm 6 chữ số" }),
@@ -42,12 +49,13 @@ export default function SignUp() {
   const [step, setStep] = useState<"request" | "verify">("request");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const requestForm = useForm<z.infer<typeof requestSchema>>({
     resolver: zodResolver(requestSchema),
-    defaultValues: { name: "", email: "" },
+    defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
   });
 
   const verifyForm = useForm<z.infer<typeof verifySchema>>({
@@ -60,17 +68,22 @@ export default function SignUp() {
       setError(null);
       setLoading(true);
       try {
-        const res = await fetch("/api/auth/send-otp", {
+        const res = await fetch("/api/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: values.email }),
+          body: JSON.stringify({
+            name: values.name,
+            email: values.email,
+            password: values.password,
+          }),
         });
         const data = await res.json();
         if (!res.ok || !data?.ok) {
-          throw new Error(data?.error || "Gửi mã thất bại");
+          throw new Error(data?.error || "Đăng ký thất bại");
         }
         setEmail(values.email);
         setName(values.name);
+        setPassword(values.password);
         setStep("verify");
       } catch (e: unknown) {
         const message = e instanceof Error ? e.message : "Đã xảy ra lỗi";
@@ -87,19 +100,29 @@ export default function SignUp() {
       setError(null);
       setLoading(true);
       try {
-        const result = await signIn("credentials", {
+        // Verify OTP first
+        const res = await fetch("/api/auth/verify-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, code: values.code }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data?.ok) {
+          throw new Error(data?.error || "Mã không hợp lệ hoặc đã hết hạn");
+        }
+
+        // Then sign in with email & password
+        const result = await signIn("password", {
           redirect: false,
           email,
-          code: values.code,
-          name,
+          password,
           callbackUrl,
         });
 
         if (!result?.ok) {
-          throw new Error(result?.error || "Mã không hợp lệ hoặc đã hết hạn");
+          throw new Error(result?.error || "Đăng nhập thất bại");
         }
 
-        // On success, redirect
         window.location.href = result.url || callbackUrl;
       } catch (e: unknown) {
         const message = e instanceof Error ? e.message : "Xác thực thất bại";
@@ -108,7 +131,7 @@ export default function SignUp() {
         setLoading(false);
       }
     },
-    [callbackUrl, email, name]
+    [callbackUrl, email, password]
   );
 
   async function oauthSignIn(provider: "google" | "github") {
@@ -161,8 +184,34 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={requestForm.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("password")}</FormLabel>
+                    <FormControl>
+                      <Input placeholder="••••••••" type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={requestForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nhập lại mật khẩu</FormLabel>
+                    <FormControl>
+                      <Input placeholder="••••••••" type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Đang gửi mã..." : "Gửi mã xác thực"}
+                {loading ? "Đang đăng ký..." : "Đăng ký & Gửi mã"}
               </Button>
               {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </form>
