@@ -18,7 +18,7 @@ import { routes } from "@/app/config/routes";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   InputOTP,
   InputOTPGroup,
@@ -35,9 +35,7 @@ export default function SignUp() {
     .object({
       name: z.string().min(2, { message: t("validation.name_min") }),
       email: z.string().email({ message: t("validation.email_invalid") }),
-      password: z
-        .string()
-        .min(6, { message: t("validation.password_min") }),
+      password: z.string().min(6, { message: t("validation.password_min") }),
       confirmPassword: z
         .string()
         .min(6, { message: t("validation.confirm_min") }),
@@ -57,6 +55,20 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // On mount, restore step/email from URL and password from sessionStorage
+  useEffect(() => {
+    const stepParam = params.get("step");
+    const emailParam = params.get("email");
+    if (stepParam === "verify") setStep("verify");
+    if (emailParam) setEmail(emailParam);
+
+    const savedPwd =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem("signup:password")
+        : null;
+    if (savedPwd && !password) setPassword(savedPwd);
+  }, [params, password]);
 
   const requestForm = useForm<z.infer<typeof requestSchema>>({
     resolver: zodResolver(requestSchema),
@@ -89,7 +101,16 @@ export default function SignUp() {
         setEmail(values.email);
         setName(values.name);
         setPassword(values.password);
+        // persist password for refresh-safe flow
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("signup:password", values.password);
+        }
         setStep("verify");
+        // reflect verify state & email in URL so refresh keeps context
+        const url = new URL(window.location.href);
+        url.searchParams.set("step", "verify");
+        url.searchParams.set("email", values.email);
+        window.history.replaceState({}, "", url.toString());
       } catch (e: unknown) {
         const message = e instanceof Error ? e.message : "Đã xảy ra lỗi";
         setError(message);
@@ -117,10 +138,15 @@ export default function SignUp() {
         }
 
         // Then sign in with email & password
+        const pwd =
+          password ||
+          (typeof window !== "undefined"
+            ? sessionStorage.getItem("signup:password") || ""
+            : "");
         const result = await signIn("password", {
           redirect: false,
           email,
-          password,
+          password: pwd,
           callbackUrl,
         });
 
@@ -128,6 +154,9 @@ export default function SignUp() {
           throw new Error(result?.error || "Đăng nhập thất bại");
         }
 
+        // clear temp password
+        if (typeof window !== "undefined")
+          sessionStorage.removeItem("signup:password");
         window.location.href = result.url || callbackUrl;
       } catch (e: unknown) {
         const message = e instanceof Error ? e.message : "Xác thực thất bại";
@@ -224,7 +253,9 @@ export default function SignUp() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? t("actions.registering") : t("actions.register_and_send_code")}
+                {loading
+                  ? t("actions.registering")
+                  : t("actions.register_and_send_code")}
               </Button>
               {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </form>
@@ -286,9 +317,27 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
+              {!email ? (
+                <FormField
+                  control={verifyForm.control}
+                  name="code"
+                  render={() => (
+                    <div className="space-y-2">
+                      <FormLabel>{t("email")}</FormLabel>
+                      <Input
+                        type="email"
+                        placeholder="you@example.com"
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
+                  )}
+                />
+              ) : null}
               <div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? t("actions.verifying") : t("actions.verify_and_signin")}
+                  {loading
+                    ? t("actions.verifying")
+                    : t("actions.verify_and_signin")}
                 </Button>
               </div>
               {error ? <p className="text-sm text-red-600">{error}</p> : null}

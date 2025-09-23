@@ -28,6 +28,27 @@ export async function POST(req: Request) {
     // Check if user exists
     const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
     if (existing) {
+      // If user exists but not verified, allow re-register to update password and resend OTP
+      if (!existing.emailVerified) {
+        const passwordHash = await bcrypt.hash(password, 12);
+        await prisma.user.update({
+          where: { email: normalizedEmail },
+          data: { name, passwordHash },
+        });
+
+        // Issue (or re-issue) OTP
+        const code = generateCode(6);
+        const expires = new Date(Date.now() + 10 * 60 * 1000);
+        await prisma.verificationToken.deleteMany({ where: { identifier: normalizedEmail } });
+        await prisma.verificationToken.create({
+          data: { identifier: normalizedEmail, token: code, expires },
+        });
+        await sendOtpEmail(normalizedEmail, code);
+
+        return NextResponse.json({ ok: true, resent: true });
+      }
+
+      // If already verified, block and ask user to sign in or reset password
       return NextResponse.json({ error: "Email already in use" }, { status: 409 });
     }
 

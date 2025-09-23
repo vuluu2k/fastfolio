@@ -93,6 +93,14 @@
       "verify_and_signin": "Xác thực & Đăng nhập",
       "verifying": "Đang xác thực...",
       "edit_email": "Sửa email"
+    },
+    "validation": {
+      "name_min": "Tên phải là ít nhất 2 ký tự",
+      "email_invalid": "Địa chỉ email không hợp lệ",
+      "password_min": "Mật khẩu phải có ít nhất 6 ký tự",
+      "confirm_min": "Xác nhận mật khẩu phải có ít nhất 6 ký tự",
+      "password_mismatch": "Mật khẩu không khớp",
+      "otp_invalid": "Mã phải là 6 chữ số"
     }
   },
   "auth_layout": {
