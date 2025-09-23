@@ -81,7 +81,19 @@
     "full_name": "Họ và tên",
     "or": "Hoặc",
     "continue_google": "Tiếp tục với Google",
-    "continue_github": "Tiếp tục với GitHub"
+    "continue_github": "Tiếp tục với GitHub",
+    "confirm_password": "Nhập lại mật khẩu",
+    "otp": {
+      "label": "Mã xác thực",
+      "sent_to": "Mã xác thực đã được gửi tới {email}. Vui lòng nhập mã gồm 6 chữ số."
+    },
+    "actions": {
+      "register_and_send_code": "Đăng ký & Gửi mã",
+      "registering": "Đang đăng ký...",
+      "verify_and_signin": "Xác thực & Đăng nhập",
+      "verifying": "Đang xác thực...",
+      "edit_email": "Sửa email"
+    }
   },
   "auth_layout": {
     "header_title": "FastFolio · AI Portfolio",

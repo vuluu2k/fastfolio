@@ -92,6 +92,26 @@
     "full_name": "Full name",
     "or": "Or",
     "continue_google": "Continue with Google",
-    "continue_github": "Continue with GitHub"
+    "continue_github": "Continue with GitHub",
+    "confirm_password": "Confirm password",
+    "otp": {
+      "label": "Verification code",
+      "sent_to": "A verification code has been sent to {email}. Please enter the 6-digit code."
+    },
+    "actions": {
+      "register_and_send_code": "Register & Send code",
+      "registering": "Registering...",
+      "verify_and_signin": "Verify & Sign in",
+      "verifying": "Verifying...",
+      "edit_email": "Edit email"
+    },
+    "validation": {
+      "name_min": "Name must be at least 2 characters",
+      "email_invalid": "Invalid email address",
+      "password_min": "Password must be at least 6 characters",
+      "confirm_min": "Confirm password must be at least 6 characters",
+      "password_mismatch": "Passwords do not match",
+      "otp_invalid": "Code must be 6 digits"
+    }
   }
 }

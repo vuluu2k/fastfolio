@@ -25,28 +25,31 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
-const requestSchema = z
-  .object({
-    name: z.string().min(2, { message: "Tên tối thiểu 2 ký tự" }),
-    email: z.string().email({ message: "Email không hợp lệ" }),
-    password: z.string().min(6, { message: "Mật khẩu tối thiểu 6 ký tự" }),
-    confirmPassword: z
-      .string()
-      .min(6, { message: "Mật khẩu tối thiểu 6 ký tự" }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Mật khẩu không khớp",
-    path: ["confirmPassword"],
-  });
-
-const verifySchema = z.object({
-  code: z.string().regex(/^\d{6}$/, { message: "Mã gồm 6 chữ số" }),
-});
-
 export default function SignUp() {
   const t = useTranslations("auth");
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl") ?? routes.home.path;
+
+  // Build schemas after we have the translation function
+  const requestSchema = z
+    .object({
+      name: z.string().min(2, { message: t("validation.name_min") }),
+      email: z.string().email({ message: t("validation.email_invalid") }),
+      password: z
+        .string()
+        .min(6, { message: t("validation.password_min") }),
+      confirmPassword: z
+        .string()
+        .min(6, { message: t("validation.confirm_min") }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("validation.password_mismatch"),
+      path: ["confirmPassword"],
+    });
+
+  const verifySchema = z.object({
+    code: z.string().regex(/^\d{6}$/, { message: t("validation.otp_invalid") }),
+  });
 
   const [step, setStep] = useState<"request" | "verify">("request");
   const [email, setEmail] = useState("");
@@ -208,7 +211,7 @@ export default function SignUp() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nhập lại mật khẩu</FormLabel>
+                    <FormLabel>{t("confirm_password")}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="••••••••"
@@ -221,7 +224,7 @@ export default function SignUp() {
                 )}
               />
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Đang đăng ký..." : "Đăng ký & Gửi mã"}
+                {loading ? t("actions.registering") : t("actions.register_and_send_code")}
               </Button>
               {error ? <p className="text-sm text-red-600">{error}</p> : null}
             </form>
@@ -234,8 +237,7 @@ export default function SignUp() {
             >
               <div>
                 <p className="text-sm text-muted-foreground">
-                  Mã xác thực đã được gửi tới {email}. Vui lòng nhập mã gồm 6
-                  chữ số.
+                  {t("otp.sent_to", { email })}
                 </p>
               </div>
               <FormField
@@ -243,7 +245,7 @@ export default function SignUp() {
                 name="code"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Mã xác thực</FormLabel>
+                    <FormLabel>{t("otp.label")}</FormLabel>
                     <FormControl>
                       <div className="flex items-center justify-between w-full gap-3">
                         <InputOTP
@@ -276,7 +278,7 @@ export default function SignUp() {
                           variant="outline"
                           onClick={() => setStep("request")}
                         >
-                          Sửa email
+                          {t("actions.edit_email")}
                         </Button>
                       </div>
                     </FormControl>
@@ -286,7 +288,7 @@ export default function SignUp() {
               />
               <div>
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Đang xác thực..." : "Xác thực & Đăng ký"}
+                  {loading ? t("actions.verifying") : t("actions.verify_and_signin")}
                 </Button>
               </div>
               {error ? <p className="text-sm text-red-600">{error}</p> : null}
