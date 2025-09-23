@@ -1,36 +1,141 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fastfolio
 
-## Getting Started
+Một dự án Next.js với xác thực đa nền tảng (Google, GitHub) và cơ sở dữ liệu PostgreSQL.
 
-First, run the development server:
+## 🚀 Công nghệ chính
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **UI**: [shadcn/ui](https://ui.shadcn.com/)
+- **Xác thực**: [NextAuth.js](https://next-auth.js.org/) với Prisma Adapter
+- **Cơ sở dữ liệu**: [PostgreSQL](https://www.postgresql.org/) + [Prisma](https://www.prisma.io/)
+- **Ngôn ngữ**: TypeScript
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+
+## 🛠️ Cài đặt
+
+1. **Clone dự án**
+   ```bash
+   git clone https://github.com/your-username/fastfolio.git
+   cd fastfolio
+   ```
+
+2. **Cài đặt dependencies**
+   ```bash
+   npm install
+   # hoặc
+   yarn
+   # hoặc
+   pnpm install
+   ```
+
+3. **Cấu hình biến môi trường**
+   Tạo file `.env.local` từ `.env.example` và điền các giá trị cần thiết:
+   ```env
+   # Database
+   DATABASE_URL="postgresql://user:password@localhost:5432/dbname?schema=public"
+   
+   # NextAuth
+   NEXTAUTH_SECRET=your-secret-key
+   NEXTAUTH_URL=http://localhost:3000
+   
+   # OAuth Providers
+   GOOGLE_CLIENT_ID=your-google-client-id
+   GOOGLE_CLIENT_SECRET=your-google-client-secret
+   GITHUB_ID=your-github-id
+   GITHUB_SECRET=your-github-secret
+   ```
+
+4. **Khởi tạo cơ sở dữ liệu**
+   ```bash
+   # Tạo và áp dụng migration
+   npx prisma migrate dev --name init
+   
+   # Hoặc nếu chỉ cần đồng bộ schema (không tạo migration)
+   npx prisma db push
+   ```
+
+5. **Chạy ứng dụng**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+   Mở [http://localhost:3000](http://localhost:3000) để xem kết quả.
+
+## 🗄️ Cấu trúc thư mục
+
+```
+fastfolio/
+├── prisma/
+│   └── schema.prisma     # Định nghĩa database schema
+├── src/
+│   ├── app/              # Next.js App Router
+│   ├── auth.config.ts    # Cấu hình NextAuth
+│   ├── lib/              # Thư viện tiện ích
+│   └── styles/           # Global styles
+├── public/               # Static files
+└── package.json          # Dependencies & scripts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔄 Scripts hữu ích
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Lệnh | Mô tả |
+|------|-------|
+| `npm run dev` | Chạy chế độ phát triển |
+| `npm run build` | Build cho production |
+| `npm start` | Chạy production build |
+| `npm run lint` | Kiểm tra lỗi code |
+| `npm run format` | Định dạng code tự động |
+| `npx prisma studio` | Mở giao diện quản lý database |
+| `npx prisma migrate dev` | Tạo và áp dụng migration mới |
+| `npx prisma generate` | Tạo lại Prisma Client |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔒 Xác thực
 
-## Learn More
+Dự án hỗ trợ đăng nhập bằng:
+- Google OAuth
+- GitHub OAuth
 
-To learn more about Next.js, take a look at the following resources:
+### Cấu hình OAuth
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Google**
+   - Tạo dự án tại [Google Cloud Console](https://console.cloud.google.com/)
+   - Thêm "Authorized redirect URIs": `http://localhost:3000/api/auth/callback/google`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **GitHub**
+   - Tạo OAuth App tại [GitHub Developer Settings](https://github.com/settings/developers)
+   - Thêm "Authorization callback URL": `http://localhost:3000/api/auth/callback/github`
 
-## Deploy on Vercel
+## 📦 Triển khai
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Vercel (Khuyến nghị)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-username%2Ffastfolio)
+
+1. Fork repository này
+2. Tạo dự án mới trên Vercel và import từ GitHub
+3. Thêm các biến môi trường cần thiết
+4. Deploy!
+
+### Self-hosted
+
+1. Build ứng dụng:
+   ```bash
+   npm run build
+   ```
+
+2. Chạy production server:
+   ```bash
+   npm start
+   ```
+
+## 📝 Giấy phép
+
+MIT
+
+---
+
+👤 **Tác giả**: [Your Name]

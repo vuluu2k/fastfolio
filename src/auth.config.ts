@@ -35,8 +35,8 @@ export const authConfig = {
   },
   // Callbacks where you can persist additional data on the token/session
   callbacks: {
-    async session({ session }: { session: any }) {
-      return session;
+    async session({ session, user }: { session: any; user: any }) {
+      return { ...session, user };
     },
   },
 };
