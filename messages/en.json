@@ -103,7 +103,9 @@
       "registering": "Registering...",
       "verify_and_signin": "Verify & Sign in",
       "verifying": "Verifying...",
-      "edit_email": "Edit email"
+      "edit_email": "Edit email",
+      "resend_code": "Resend code",
+      "resending": "Resending..."
     },
     "validation": {
       "name_min": "Name must be at least 2 characters",

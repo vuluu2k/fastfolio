@@ -54,6 +54,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [resending, setResending] = useState(false);
 
   // On mount, restore step/email from URL and password from sessionStorage
   useEffect(() => {
@@ -123,6 +124,28 @@ export default function SignUp() {
     },
     []
   );
+
+  const onResend = useCallback(async () => {
+    if (!email) return;
+    setError(null);
+    setResending(true);
+    try {
+      const res = await fetch("/api/auth/resend-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data?.ok) {
+        throw new Error(data?.error || "Resend failed");
+      }
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Resend failed";
+      setError(message as string);
+    } finally {
+      setResending(false);
+    }
+  }, [email]);
 
   const onVerify = useCallback(
     async (values: z.infer<typeof verifySchema>) => {
@@ -313,9 +336,10 @@ export default function SignUp() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => setStep("request")}
+                      onClick={onResend}
+                      disabled={resending}
                     >
-                      {t("actions.edit_email")}
+                      {resending ? t("actions.resending") : t("actions.resend_code")}
                     </Button>
                   </div>
                 </FormControl>
