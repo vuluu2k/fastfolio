@@ -76,7 +76,8 @@
       "subtitle": "Sign in to manage your portfolio projects on FastFolio.",
       "submit": "Sign in",
       "no_account": "Don't have an account?",
-      "link": "Sign in"
+      "link": "Sign in",
+      "login_error": "Login error"
     },
     "signup": {
       "title": "Create account",

@@ -65,7 +65,8 @@
       "subtitle": "Đăng nhập để quản lý dự án portfolio của bạn trên FastFolio.",
       "submit": "Đăng nhập",
       "no_account": "Chưa có tài khoản?",
-      "link": "Đăng nhập"
+      "link": "Đăng nhập",
+      "login_error": "Lỗi đăng nhập"
     },
     "signup": {
       "title": "Tạo tài khoản",
