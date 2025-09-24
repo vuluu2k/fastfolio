@@ -1,11 +1,14 @@
-import Sidebar from "@/components/layout/dashboard/Sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/layout/dashboard/AppSidebar";
 
-function DashboardLayout() {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar">
-      <Sidebar />
-    </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
   );
 }
-
-export default DashboardLayout;
