@@ -71,7 +71,7 @@ function AboutSection() {
           defaultValue="item-1"
         >
           {abouts.map((about) => (
-            <AccordionItem value={about.key}>
+            <AccordionItem key={about.key} value={about.key}>
               <AccordionTrigger>{about.question}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground">
                 {about.answer}
