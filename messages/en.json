@@ -116,5 +116,14 @@
       "password_mismatch": "Passwords do not match",
       "otp_invalid": "Code must be 6 digits"
     }
+  },
+  "dashboard": {
+    "dashboard": "Dashboard",
+    "analytics": "Analytics",
+    "publish": "Publish",
+    "portfolio": "Portfolio",
+    "basic_info": "Basic info",
+    "tools": "Tools",
+    "questions": "Questions"
   }
 }

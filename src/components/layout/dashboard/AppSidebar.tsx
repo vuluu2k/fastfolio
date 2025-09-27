@@ -1,67 +1,97 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+"use client";
 
+import * as React from "react";
+import {
+  Frame,
+  House,
+  MapPin,
+  PieChart,
+  ChartColumnIncreasing,
+  Rocket,
+} from "lucide-react";
+
+import { NavMain } from "@/components/layout/dashboard/NavMain";
+import { NavPortfolio } from "@/components/layout/dashboard/NavPortfolio";
+import { NavUser } from "@/components/layout/dashboard/NavUser";
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
+import SidebarLogo from "@/components/layout/dashboard/SidebarLogo";
+import { useTranslations } from "next-intl";
+import { routes } from "@/app/config/routes";
+import { usePathname } from "next/navigation";
+// This is sample data.
 
-export function AppSidebar() {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const t = useTranslations("dashboard");
+  const pathname = usePathname();
+  console.log(pathname);
+
+  const navMain = [
+    {
+      title: t("dashboard"),
+      url: routes.dashboard.path,
+      icon: House,
+      isActive: pathname === routes.dashboard.path,
+    },
+    {
+      title: t("analytics"),
+      url: routes.analytics.path,
+      icon: ChartColumnIncreasing,
+      isActive: pathname === routes.analytics.path,
+    },
+    {
+      title: t("publish"),
+      url: routes.publish.path,
+      icon: Rocket,
+      isActive: pathname === routes.publish.path,
+    },
+  ];
+
+  const portfolio = [
+    {
+      name: t("basic_info"),
+      url: "#",
+      check: true,
+    },
+    {
+      name: "AI",
+      url: "#",
+    },
+    {
+      name: t("tools"),
+      url: "#",
+    },
+    {
+      name: t("questions"),
+      url: "#",
+    },
+  ];
+
+  const user = {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
+  };
+
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
+        <SidebarLogo />
+      </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <NavMain items={navMain} />
+        <NavPortfolio portfolio={portfolio} />
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser user={user} />
+      </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   );
 }

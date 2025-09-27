@@ -28,4 +28,16 @@ export const routes: Routes = {
     path: "/signup",
     name: "Sign Up",
   },
+  dashboard: {
+    path: "/dashboard",
+    name: "Dashboard",
+  },
+  analytics: {
+    path: "/analytics",
+    name: "Analytics",
+  },
+  publish: {
+    path: "/publish",
+    name: "Publish",
+  },
 };

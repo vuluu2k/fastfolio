@@ -113,5 +113,14 @@
     "highlight_2": "Tùy biến chủ đề",
     "highlight_3": "Tối ưu SEO",
     "quote_text": "Hiển thị dự án của bạn một cách chuyên nghiệp. Kết nối nhanh với nhà tuyển dụng."
+  },
+  "dashboard": {
+    "dashboard": "Bảng điều khiển",
+    "analytics": "Phân tích",
+    "publish": "Xuất bản",
+    "portfolio": "Danh mục đầu tư",
+    "basic_info": "Thông tin cơ bản",
+    "tools": "Công cụ",
+    "questions": "Câu hỏi"
   }
 }
