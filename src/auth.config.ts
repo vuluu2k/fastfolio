@@ -4,8 +4,9 @@ import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { AuthOptions } from "next-auth";
 
-export const authConfig = {
+export const authConfig: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   providers: [
@@ -61,9 +62,77 @@ export const authConfig = {
   },
   // Callbacks where you can persist additional data on the token/session
   callbacks: {
-    async session({ session, user }: { session: any; user: any }) {
-      return { ...session, user };
+    async jwt({ token, user }) {
+      if (user) {
+        token.sub = (user as any).id ?? token.sub;
+        token.name = user.name ?? token.name;
+        token.email = user.email ?? token.email;
+        token.picture = (user as any).image ?? token.picture;
+      }
+
+      if (token?.sub || token?.email) {
+        const safeUser = await prisma.user.findFirst({
+          where: {
+            OR: [
+              token.sub ? { id: token.sub as string } : undefined,
+              token.email ? { email: token.email as string } : undefined,
+            ].filter(Boolean) as any,
+          },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            emailVerified: true,
+          },
+        });
+
+        if (safeUser) {
+          token.sub = safeUser.id;
+          token.name = safeUser.name ?? token.name;
+          token.email = safeUser.email ?? token.email;
+          token.picture = safeUser.image ?? token.picture;
+        }
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      const id = (token as any)?.sub as string | undefined;
+      const email = token?.email as string | undefined;
+
+      if (id || email) {
+        const safeUser = await prisma.user.findFirst({
+          where: {
+            OR: [
+              id ? { id } : undefined,
+              email ? { email } : undefined,
+            ].filter(Boolean) as any,
+          },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            emailVerified: true,
+          },
+        });
+
+        if (safeUser) {
+          (session as any).user = safeUser;
+          return session;
+        }
+      }
+
+      // Fallback: map minimal fields from token
+      (session as any).user = {
+        id: id,
+        name: token?.name as string | undefined,
+        email: token?.email as string | undefined,
+        image: (token as any)?.picture ?? null,
+      } as any;
+      return session;
     },
   },
 };
-

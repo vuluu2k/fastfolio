@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 // Define protected route prefixes
-const protectedRoutes = ["/dashboard"];
+const protectedRoutes = ["/dashboard", "/analytics", "/publish", "/portfolio"];
 
 export default async function middleware(req: NextRequest) {
-  // getToken returns the JWT when session strategy is 'jwt' and NEXTAUTH_SECRET is set
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   const { nextUrl } = req;
@@ -24,5 +23,9 @@ export default async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$).*)",
+    "/dashboard",
+    "/analytics",
+    "/publish",
+    "/portfolio",
   ],
 };
