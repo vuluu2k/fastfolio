@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 
 export const authConfig = {
   adapter: PrismaAdapter(prisma),
+  session: { strategy: "jwt" },
   providers: [
     Credentials({
       id: "password",

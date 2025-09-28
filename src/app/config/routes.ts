@@ -40,4 +40,20 @@ export const routes: Routes = {
     path: "/publish",
     name: "Publish",
   },
+  basic_info: {
+    path: "portfolio/basic-info",
+    name: "Basic Info",
+  },
+  ai: {
+    path: "portfolio/ai",
+    name: "AI",
+  },
+  tools: {
+    path: "portfolio/tools",
+    name: "Tools",
+  },
+  questions: {
+    path: "portfolio/questions",
+    name: "Questions",
+  },
 };

@@ -25,12 +25,14 @@ import SidebarLogo from "@/components/layout/dashboard/SidebarLogo";
 import { useTranslations } from "next-intl";
 import { routes } from "@/app/config/routes";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 // This is sample data.
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const t = useTranslations("dashboard");
   const pathname = usePathname();
-  console.log(pathname);
+  const { data: session, status } = useSession();
+  console.log({ status, session });
 
   const navMain = [
     {
@@ -56,20 +58,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const portfolio = [
     {
       name: t("basic_info"),
-      url: "#",
+      url: routes.basic_info.path,
       check: true,
     },
     {
       name: "AI",
-      url: "#",
+      url: routes.ai.path,
     },
     {
       name: t("tools"),
-      url: "#",
+      url: routes.tools.path,
     },
     {
       name: t("questions"),
-      url: "#",
+      url: routes.questions.path,
     },
   ];
 
