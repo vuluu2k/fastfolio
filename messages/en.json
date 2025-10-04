@@ -124,6 +124,9 @@
     "portfolio": "Portfolio",
     "basic_info": "Basic info",
     "tools": "Tools",
-    "questions": "Questions"
+    "questions": "Questions",
+    "logout": "Logout",
+    "draft": "Draft",
+    "visit": "Visit"
   }
 }
