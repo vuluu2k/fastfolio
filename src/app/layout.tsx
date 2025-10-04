@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "@/components/ui/sonner";
 import AuthSessionProvider from "@/components/providers/session-provider";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function RootLayout({
             <Toaster />
           </NextIntlClientProvider>
         </AuthSessionProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
